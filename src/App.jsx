@@ -4,17 +4,17 @@ import { useState, useEffect, useCallback } from "react";
 const generateId = () => Math.random().toString(36).substr(2, 9);
 
 const initialStudents = [
-  { id: "s1", name: "Arjun Mehta", email: "arjun@mail.com", phone: "9876543210", belt: "Yellow", age: 22, weight: "68kg", joinDate: "2024-06-15", status: "approved", avatar: "AM", fee: { amount: 2500, status: "completed", dueDate: "2025-03-01", history: [{ month: "Jan 2025", status: "completed", paidOn: "2025-01-05" }, { month: "Feb 2025", status: "completed", paidOn: "2025-02-03" }] }, competitions: ["c1"], wins: 3, losses: 1, rank: 2 },
-  { id: "s2", name: "Priya Sharma", email: "priya@mail.com", phone: "9876543211", belt: "Green", age: 19, weight: "55kg", joinDate: "2024-09-01", status: "approved", avatar: "PS", fee: { amount: 2500, status: "pending", dueDate: "2025-03-01", history: [{ month: "Jan 2025", status: "completed", paidOn: "2025-01-10" }, { month: "Feb 2025", status: "pending", paidOn: null }] }, competitions: ["c1", "c2"], wins: 5, losses: 0, rank: 1 },
-  { id: "s3", name: "Rahul Verma", email: "rahul@mail.com", phone: "9876543212", belt: "White", age: 25, weight: "75kg", joinDate: "2025-01-10", status: "pending", avatar: "RV", fee: { amount: 2500, status: "pending", dueDate: "2025-03-01", history: [] }, competitions: [], wins: 0, losses: 0, rank: 0 },
-  { id: "s4", name: "Sneha Patil", email: "sneha@mail.com", phone: "9876543213", belt: "Orange", age: 21, weight: "60kg", joinDate: "2024-08-20", status: "approved", avatar: "SP", fee: { amount: 2500, status: "overdue", dueDate: "2025-02-01", history: [{ month: "Jan 2025", status: "overdue", paidOn: null }, { month: "Feb 2025", status: "overdue", paidOn: null }] }, competitions: ["c2"], wins: 2, losses: 2, rank: 4 },
-  { id: "s5", name: "Vikram Singh", email: "vikram@mail.com", phone: "9876543214", belt: "Yellow", age: 28, weight: "82kg", joinDate: "2024-07-05", status: "approved", avatar: "VS", fee: { amount: 2500, status: "completed", dueDate: "2025-03-01", history: [{ month: "Jan 2025", status: "completed", paidOn: "2025-01-02" }, { month: "Feb 2025", status: "completed", paidOn: "2025-02-01" }] }, competitions: ["c1"], wins: 4, losses: 1, rank: 3 },
+  { id: "s1", name: "Arjun Mehta", email: "arjun@mail.com", phone: "9876543210", event: "PF", age: 22, weight: "68kg", joinDate: "2024-06-15", status: "approved", avatar: "AM", fee: { amount: 2500, status: "pending", dueDate: "2025-03-01", history: [{ month: "Jan 2025", status: "completed", paidOn: "2025-01-05" }, { month: "Feb 2025", status: "completed", paidOn: "2025-02-03" }] }, competitions: ["c1"], wins: 3, losses: 1, rank: 2 },
+  { id: "s2", name: "Priya Sharma", email: "priya@mail.com", phone: "9876543211", event: "LK", age: 19, weight: "55kg", joinDate: "2024-09-01", status: "approved", avatar: "PS", fee: { amount: 2500, status: "pending", dueDate: "2025-03-01", history: [{ month: "Jan 2025", status: "completed", paidOn: "2025-01-10" }, { month: "Feb 2025", status: "pending", paidOn: null }] }, competitions: ["c1", "c2"], wins: 5, losses: 0, rank: 1 },
+  { id: "s3", name: "Rahul Verma", email: "rahul@mail.com", phone: "9876543212", event: "PF", age: 25, weight: "75kg", joinDate: "2025-01-10", status: "pending", avatar: "RV", fee: { amount: 2500, status: "pending", dueDate: "2025-03-01", history: [] }, competitions: [], wins: 0, losses: 0, rank: 0 },
+  { id: "s4", name: "Sneha Patil", email: "sneha@mail.com", phone: "9876543213", event: "KL", age: 21, weight: "60kg", joinDate: "2024-08-20", status: "approved", avatar: "SP", fee: { amount: 2500, status: "overdue", dueDate: "2025-02-01", history: [{ month: "Jan 2025", status: "overdue", paidOn: null }, { month: "Feb 2025", status: "overdue", paidOn: null }] }, competitions: ["c2"], wins: 2, losses: 2, rank: 4 },
+  { id: "s5", name: "Vikram Singh", email: "vikram@mail.com", phone: "9876543214", event: "K1", age: 28, weight: "82kg", joinDate: "2024-07-05", status: "approved", avatar: "VS", fee: { amount: 2500, status: "completed", dueDate: "2025-03-01", history: [{ month: "Jan 2025", status: "completed", paidOn: "2025-01-02" }, { month: "Feb 2025", status: "completed", paidOn: "2025-02-01" }] }, competitions: ["c1"], wins: 4, losses: 1, rank: 3 },
 ];
 
 const initialCompetitions = [
-  { id: "c1", name: "Academy Championship 2025", date: "2025-03-15", venue: "City Sports Arena", category: "All Belts", status: "open", maxParticipants: 32, registeredStudents: ["s1", "s2", "s5"], results: [], description: "Annual academy-wide championship open to all belt levels." },
-  { id: "c2", name: "Inter-Academy Sparring", date: "2025-02-10", venue: "District Sports Complex", category: "Green Belt+", status: "completed", maxParticipants: 16, registeredStudents: ["s2", "s4"], results: [{ position: 1, studentId: "s2", studentName: "Priya Sharma" }, { position: 2, studentId: "s4", studentName: "Sneha Patil" }], description: "Friendly inter-academy sparring event." },
-  { id: "c3", name: "State Kickboxing Open", date: "2025-05-20", venue: "State Stadium", category: "Yellow Belt+", status: "upcoming", maxParticipants: 64, registeredStudents: [], results: [], description: "State level open competition. Registration opens soon." },
+  { id: "c1", name: "Academy Championship 2025", date: "2025-03-15", venue: "City Sports Arena", category: "PF/KL", status: "open", maxParticipants: 32, registeredStudents: ["s1", "s2", "s5"], results: [], description: "Annual academy-wide championship open to Point Fight and Kick Light." },
+  { id: "c2", name: "Inter-Academy Sparring", date: "2025-02-10", venue: "District Sports Complex", category: "LK/K1", status: "completed", maxParticipants: 16, registeredStudents: ["s2", "s4"], results: [{ position: 1, studentId: "s2", studentName: "Priya Sharma" }, { position: 2, studentId: "s4", studentName: "Sneha Patil" }], description: "Friendly inter-academy sparring event focusing on Low Kick." },
+  { id: "c3", name: "State Kickboxing Open", date: "2025-05-20", venue: "State Stadium", category: "All Events", status: "upcoming", maxParticipants: 64, registeredStudents: [], results: [], description: "State level open competition. Registration opens soon." },
 ];
 
 const initialNotifications = [
@@ -26,44 +26,45 @@ const initialNotifications = [
 // --- Icons ---
 const Icon = ({ name, size = 20 }) => {
   const icons = {
-    dashboard: <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>,
-    users: <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>,
-    trophy: <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg>,
-    money: <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>,
-    bell: <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>,
-    profile: <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>,
-    check: <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"/></svg>,
-    x: <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>,
-    plus: <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>,
-    star: <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" strokeWidth="1"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>,
-    rank: <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 20V10"/><path d="M18 20V4"/><path d="M6 20v-4"/></svg>,
-    calendar: <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>,
-    send: <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>,
-    logout: <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>,
-    fist: <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 11V6a2 2 0 0 0-4 0v3"/><path d="M14 10V4a2 2 0 0 0-4 0v6"/><path d="M10 10.5V6a2 2 0 0 0-4 0v8"/><path d="M18 8a2 2 0 1 1 4 0v6a8 8 0 0 1-8 8h-2c-2.8 0-4.5-.86-5.99-2.34l-3.6-3.6a2 2 0 0 1 2.83-2.82L7 15"/></svg>,
-    eye: <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>,
-    clock: <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>,
-    award: <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="8" r="7"/><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"/></svg>,
-    edit: <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="m18.5 2.5 2.5 2.5L12 14l-4 1 1-4 9-9z"/></svg>,
-    arrowLeft: <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>,
+    dashboard: <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="3" width="7" height="7" rx="1" /><rect x="14" y="3" width="7" height="7" rx="1" /><rect x="3" y="14" width="7" height="7" rx="1" /><rect x="14" y="14" width="7" height="7" rx="1" /></svg>,
+    users: <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" /><circle cx="9" cy="7" r="4" /><path d="M23 21v-2a4 4 0 0 0-3-3.87" /><path d="M16 3.13a4 4 0 0 1 0 7.75" /></svg>,
+    trophy: <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6" /><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18" /><path d="M4 22h16" /><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20 7 22" /><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20 17 22" /><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z" /></svg>,
+    money: <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="12" y1="1" x2="12" y2="23" /><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" /></svg>,
+    bell: <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" /><path d="M13.73 21a2 2 0 0 1-3.46 0" /></svg>,
+    profile: <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" /><circle cx="12" cy="7" r="4" /></svg>,
+    check: <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12" /></svg>,
+    x: <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" /></svg>,
+    plus: <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="12" y1="5" x2="12" y2="19" /><line x1="5" y1="12" x2="19" y2="12" /></svg>,
+    star: <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" strokeWidth="1"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" /></svg>,
+    rank: <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 20V10" /><path d="M18 20V4" /><path d="M6 20v-4" /></svg>,
+    calendar: <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2" /><line x1="16" y1="2" x2="16" y2="6" /><line x1="8" y1="2" x2="8" y2="6" /><line x1="3" y1="10" x2="21" y2="10" /></svg>,
+    send: <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="22" y1="2" x2="11" y2="13" /><polygon points="22 2 15 22 11 13 2 9 22 2" /></svg>,
+    logout: <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" /><polyline points="16 17 21 12 16 7" /><line x1="21" y1="12" x2="9" y2="12" /></svg>,
+    fist: <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 11V6a2 2 0 0 0-4 0v3" /><path d="M14 10V4a2 2 0 0 0-4 0v6" /><path d="M10 10.5V6a2 2 0 0 0-4 0v8" /><path d="M18 8a2 2 0 1 1 4 0v6a8 8 0 0 1-8 8h-2c-2.8 0-4.5-.86-5.99-2.34l-3.6-3.6a2 2 0 0 1 2.83-2.82L7 15" /></svg>,
+    eye: <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" /><circle cx="12" cy="12" r="3" /></svg>,
+    clock: <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10" /><polyline points="12 6 12 12 16 14" /></svg>,
+    award: <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="8" r="7" /><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88" /></svg>,
+    edit: <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" /><path d="m18.5 2.5 2.5 2.5L12 14l-4 1 1-4 9-9z" /></svg>,
+    arrowLeft: <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="19" y1="12" x2="5" y2="12" /><polyline points="12 19 5 12 12 5" /></svg>,
   };
   return icons[name] || null;
 };
 
-// --- Belt Colors ---
-const beltColors = {
-  White: { bg: "#f5f5f5", text: "#333", border: "#ddd" },
-  Yellow: { bg: "#FFF3CD", text: "#856404", border: "#FFD93D" },
-  Orange: { bg: "#FFE0CC", text: "#C44900", border: "#FF8C42" },
-  Green: { bg: "#D4EDDA", text: "#155724", border: "#48BF84" },
-  Blue: { bg: "#CCE5FF", text: "#004085", border: "#4D96FF" },
-  Brown: { bg: "#E8D5C4", text: "#5C3317", border: "#A0522D" },
-  Black: { bg: "#333", text: "#fff", border: "#000" },
+// --- Event Types & Styles ---
+const eventTypes = ["PF", "LK", "KL", "K1", "FC", "OC"];
+const eventMeta = {
+  PF: { label: "Point Fight", color: "#4D96FF" },
+  LK: { label: "Low Kick", color: "#FF3D3D" },
+  KL: { label: "Kick Light", color: "#FFD93D" },
+  K1: { label: "K1 Styles", color: "#FF8C42" },
+  FC: { label: "Full Contact", color: "#48BF84" },
+  OC: { label: "Other", color: "#8888A0" }
 };
 
 const feeBadge = {
   completed: { bg: "#D4EDDA", text: "#155724", label: "Paid" },
   pending: { bg: "#FFF3CD", text: "#856404", label: "Pending" },
+  verifying: { bg: "#CCE5FF", text: "#004085", label: "Verifying" },
   overdue: { bg: "#F8D7DA", text: "#721C24", label: "Overdue" },
 };
 
@@ -388,14 +389,15 @@ tr:hover td { background: var(--bg-card-hover); }
   gap: 4px;
 }
 
-.belt-badge {
+.event-badge {
   display: inline-flex;
   align-items: center;
   padding: 3px 10px;
   border-radius: 6px;
-  font-size: 12px;
-  font-weight: 600;
-  border: 1px solid;
+  font-size: 11px;
+  font-weight: 700;
+  border: 1px solid rgba(255,255,255,0.1);
+  background: var(--bg-card-hover);
 }
 
 /* Buttons */
@@ -994,10 +996,10 @@ export default function KickboxingApp() {
           <div className="login-card">
             <div className="login-brand">
               <div className="brand-icon"><Icon name="fist" size={24} /></div>
-              <h1>STRIKEFORCE</h1>
+              <h1>Yoddha Academy</h1>
             </div>
             <h2>Welcome Back</h2>
-            <p>Sign in to your kickboxing academy portal</p>
+            <p>Sign in to your Academy Portal</p>
             <div className="login-form">
               <div className="role-toggle">
                 <button className={`role-btn ${loginRole === "student" ? "active" : ""}`} onClick={() => setLoginRole("student")}>Student</button>
@@ -1068,7 +1070,7 @@ export default function KickboxingApp() {
         <aside className={`sidebar ${sidebarOpen ? "open" : ""}`}>
           <div className="sidebar-brand">
             <div className="brand-icon"><Icon name="fist" size={22} /></div>
-            <div className="brand-text"><h1>STRIKEFORCE</h1><span>Academy Portal</span></div>
+            <div className="brand-text"><h1>YODDHA</h1><span>Fighting & Fitness</span></div>
           </div>
           <nav className="sidebar-nav">
             <div className="nav-label">Menu</div>
@@ -1101,7 +1103,7 @@ export default function KickboxingApp() {
           {currentPage === "dashboard" && <DashboardPage isTrainer={isTrainer} students={students} competitions={competitions} currentStudent={currentStudent} setCurrentPage={setCurrentPage} />}
           {currentPage === "students" && isTrainer && <StudentsPage students={students} setStudents={setStudents} selectedStudent={selectedStudent} setSelectedStudent={setSelectedStudent} showToast={showToast} searchText={searchText} setSearchText={setSearchText} competitions={competitions} />}
           {currentPage === "competitions" && <CompetitionsPage competitions={competitions} setCompetitions={setCompetitions} students={students} setStudents={setStudents} isTrainer={isTrainer} currentStudent={currentStudent} modal={modal} setModal={setModal} showToast={showToast} selectedComp={selectedComp} setSelectedComp={setSelectedComp} />}
-          {currentPage === "fees" && <FeesPage isTrainer={isTrainer} students={students} setStudents={setStudents} currentStudent={currentStudent} showToast={showToast} />}
+          {currentPage === "fees" && <FeesPage isTrainer={isTrainer} students={students} setStudents={setStudents} currentStudent={currentStudent} showToast={showToast} setModal={setModal} setSelectedStudent={setSelectedStudent} />}
           {currentPage === "rankings" && <RankingsPage students={students} />}
           {currentPage === "notifications" && <NotificationsPage notifications={notifications} setNotifications={setNotifications} userId={user.id} isTrainer={isTrainer} students={students} showToast={showToast} modal={modal} setModal={setModal} />}
           {currentPage === "profile" && !isTrainer && <ProfilePage student={currentStudent} setModal={setModal} />}
@@ -1109,6 +1111,8 @@ export default function KickboxingApp() {
       </div>
       {modal === "register" && <RegisterModal students={students} setStudents={setStudents} close={() => setModal(null)} showToast={showToast} />}
       {modal === "editProfile" && <EditProfileModal student={currentStudent} students={students} setStudents={setStudents} close={() => setModal(null)} showToast={showToast} />}
+      {modal === "submitUtr" && <SubmitUtrModal currentStudent={currentStudent} setStudents={setStudents} close={() => setModal(null)} showToast={showToast} />}
+      {modal === "verifyUtr" && <VerifyUtrModal selectedStudent={selectedStudent} students={students} setStudents={setStudents} close={() => setModal(null)} showToast={showToast} />}
       {toast && <div className={`toast toast-${toast.type}`}><span className="toast-icon"><Icon name="check" size={16} /></span>{toast.msg}</div>}
     </>
   );
@@ -1160,7 +1164,7 @@ function DashboardPage({ isTrainer, students, competitions, currentStudent, setC
                     {students.slice().sort((a, b) => b.joinDate.localeCompare(a.joinDate)).slice(0, 5).map(s => (
                       <tr key={s.id}>
                         <td style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                          <div className="user-avatar" style={{ width: 28, height: 28, fontSize: 10, background: `linear-gradient(135deg, ${beltColors[s.belt]?.border || "#888"}, ${beltColors[s.belt]?.bg || "#ccc"})`, color: beltColors[s.belt]?.text || "#333" }}>{s.avatar}</div>
+                          <div className="user-avatar" style={{ width: 28, height: 28, fontSize: 10, background: eventMeta[s.event]?.color || "var(--border)", color: "white" }}>{s.avatar}</div>
                           {s.name}
                         </td>
                         <td><span className="badge" style={{ background: s.status === "approved" ? "rgba(72,191,132,0.15)" : "rgba(255,217,61,0.15)", color: s.status === "approved" ? "var(--accent-green)" : "var(--accent-gold)" }}>{s.status}</span></td>
@@ -1199,9 +1203,9 @@ function DashboardPage({ isTrainer, students, competitions, currentStudent, setC
       <div className="page-body">
         <div className="stat-grid">
           <div className="stat-card">
-            <div className="stat-icon" style={{ background: `${beltColors[currentStudent?.belt]?.bg}`, color: beltColors[currentStudent?.belt]?.text }}><Icon name="award" /></div>
-            <div className="stat-value">{currentStudent?.belt || "—"}</div>
-            <div className="stat-label">Current Belt</div>
+            <div className="stat-icon" style={{ background: "rgba(77,150,255,0.12)", color: "var(--accent-blue)" }}><Icon name="award" /></div>
+            <div className="stat-value">{currentStudent?.event || "—"}</div>
+            <div className="stat-label">Primary Event</div>
           </div>
           <div className="stat-card">
             <div className="stat-icon" style={{ background: "rgba(72,191,132,0.12)", color: "var(--accent-green)" }}><Icon name="trophy" /></div>
@@ -1261,7 +1265,7 @@ function StudentsPage({ students, setStudents, selectedStudent, setSelectedStude
         <div className="page-body">
           <button className="detail-back" onClick={() => setSelectedStudent(null)}><Icon name="arrowLeft" size={16} /> Back to students</button>
           <div className="profile-header">
-            <div className="profile-avatar" style={{ background: `linear-gradient(135deg, ${beltColors[s.belt]?.border || "#888"}, ${beltColors[s.belt]?.text || "#333"})` }}>{s.avatar}</div>
+            <div className="profile-avatar" style={{ background: eventMeta[s.event]?.color || "var(--accent)" }}>{s.avatar}</div>
             <div className="profile-details">
               <h3>{s.name}</h3>
               <p>{s.email} · {s.phone}</p>
@@ -1273,7 +1277,7 @@ function StudentsPage({ students, setStudents, selectedStudent, setSelectedStude
             </div>
           </div>
           <div className="info-grid">
-            <div className="info-card"><label>Belt</label><span className="belt-badge" style={{ background: beltColors[s.belt]?.bg, color: beltColors[s.belt]?.text, borderColor: beltColors[s.belt]?.border }}>{s.belt} Belt</span></div>
+            <div className="info-card"><label>Primary Event</label><span className="event-badge" style={{ color: eventMeta[s.event]?.color }}>{eventMeta[s.event]?.label}</span></div>
             <div className="info-card"><label>Age</label><p>{s.age} years</p></div>
             <div className="info-card"><label>Weight</label><p>{s.weight}</p></div>
             <div className="info-card"><label>Joined</label><p>{s.joinDate}</p></div>
@@ -1349,15 +1353,15 @@ function StudentsPage({ students, setStudents, selectedStudent, setSelectedStude
           </div>
           <div className="table-scroll">
             <table>
-              <thead><tr><th>Name</th><th>Belt</th><th>W/L</th><th>Rank</th><th>Fee</th><th>Joined</th><th></th></tr></thead>
+              <thead><tr><th>Name</th><th>Event</th><th>W/L</th><th>Rank</th><th>Fee</th><th>Joined</th><th></th></tr></thead>
               <tbody>
                 {filtered.map(s => (
                   <tr key={s.id}>
                     <td style={{ display: "flex", alignItems: "center", gap: 10 }}>
-                      <div className="user-avatar" style={{ width: 30, height: 30, fontSize: 11, background: `linear-gradient(135deg, ${beltColors[s.belt]?.border || "#888"}, ${beltColors[s.belt]?.bg || "#ccc"})`, color: beltColors[s.belt]?.text || "#333" }}>{s.avatar}</div>
+                      <div className="user-avatar" style={{ width: 30, height: 30, fontSize: 11, background: eventMeta[s.event]?.color || "var(--border)", color: "white" }}>{s.avatar}</div>
                       {s.name}
                     </td>
-                    <td><span className="belt-badge" style={{ background: beltColors[s.belt]?.bg, color: beltColors[s.belt]?.text, borderColor: beltColors[s.belt]?.border }}>{s.belt}</span></td>
+                    <td><span className="event-badge" style={{ color: eventMeta[s.event]?.color }}>{s.event}</span></td>
                     <td>{s.wins}—{s.losses}</td>
                     <td>{s.rank ? `#${s.rank}` : "—"}</td>
                     <td><span className="badge" style={{ background: feeBadge[s.fee.status]?.bg, color: feeBadge[s.fee.status]?.text }}>{feeBadge[s.fee.status]?.label}</span></td>
@@ -1415,12 +1419,12 @@ function CompetitionsPage({ competitions, setCompetitions, students, setStudents
             ) : (
               <div className="table-scroll">
                 <table>
-                  <thead><tr><th>Name</th><th>Belt</th><th>Weight</th></tr></thead>
+                  <thead><tr><th>Name</th><th>Event</th><th>Weight</th></tr></thead>
                   <tbody>
                     {registered.map(s => (
                       <tr key={s.id}>
                         <td>{s.name}</td>
-                        <td><span className="belt-badge" style={{ background: beltColors[s.belt]?.bg, color: beltColors[s.belt]?.text, borderColor: beltColors[s.belt]?.border }}>{s.belt}</span></td>
+                        <td><span className="event-badge" style={{ color: eventMeta[s.event]?.color }}>{s.event}</span></td>
                         <td>{s.weight}</td>
                       </tr>
                     ))}
@@ -1489,7 +1493,7 @@ function CompetitionsPage({ competitions, setCompetitions, students, setStudents
 }
 
 // --- Fees Page ---
-function FeesPage({ isTrainer, students, setStudents, currentStudent, showToast }) {
+function FeesPage({ isTrainer, students, setStudents, currentStudent, showToast, setModal, setSelectedStudent }) {
   const approved = students.filter(s => s.status === "approved");
 
   if (!isTrainer) {
@@ -1512,7 +1516,18 @@ function FeesPage({ isTrainer, students, setStudents, currentStudent, showToast 
               <div style={{ fontSize: 16, fontWeight: 600 }}>{currentStudent.fee.dueDate}</div>
             </div>
           </div>
-          <div className="data-table-wrap">
+          {currentStudent.fee.status === "pending" && !currentStudent.fee.utr && (
+            <div style={{ marginTop: 24, textAlign: "center" }}>
+              <button className="btn btn-primary" onClick={() => setModal("submitUtr")}><Icon name="money" size={16} /> Submit Payment Details (UTR)</button>
+            </div>
+          )}
+          {currentStudent.fee.status === "pending" && currentStudent.fee.utr && (
+            <div style={{ marginTop: 24, padding: 16, background: "var(--bg-card-hover)", borderRadius: "var(--radius)", textAlign: "center" }}>
+              <p style={{ color: "var(--accent-blue)", fontWeight: 600 }}>Verification Pending</p>
+              <p style={{ fontSize: 13, color: "var(--text-secondary)", marginTop: 4 }}>UTR: {currentStudent.fee.utr}</p>
+            </div>
+          )}
+          <div className="data-table-wrap" style={{ marginTop: 24 }}>
             <div className="table-header"><h3>Payment History</h3></div>
             {currentStudent.fee.history.length === 0 ? (
               <div className="empty-state"><p>No payment records yet.</p></div>
@@ -1556,15 +1571,20 @@ function FeesPage({ isTrainer, students, setStudents, currentStudent, showToast 
                     <td><span className="badge" style={{ background: feeBadge[s.fee.status]?.bg, color: feeBadge[s.fee.status]?.text }}>{feeBadge[s.fee.status]?.label}</span></td>
                     <td style={{ color: "var(--text-muted)", fontSize: 13 }}>{s.fee.dueDate}</td>
                     <td>
-                      <select className="form-select" style={{ width: 140, padding: "6px 10px", fontSize: 12 }} value={s.fee.status} onChange={e => {
-                        const newStatus = e.target.value;
-                        setStudents(prev => prev.map(st => st.id === s.id ? { ...st, fee: { ...st.fee, status: newStatus } } : st));
-                        showToast(`${s.name}'s fee marked as ${newStatus}`);
-                      }}>
-                        <option value="completed">Completed</option>
-                        <option value="pending">Pending</option>
-                        <option value="overdue">Overdue</option>
-                      </select>
+                      <div className="action-buttons">
+                        <select className="form-select" style={{ width: 120, padding: "6px 10px", fontSize: 12 }} value={s.fee.status} onChange={e => {
+                          const newStatus = e.target.value;
+                          setStudents(prev => prev.map(st => st.id === s.id ? { ...st, fee: { ...st.fee, status: newStatus } } : st));
+                          showToast(`${s.name}'s fee marked as ${newStatus}`);
+                        }}>
+                          <option value="completed">Completed</option>
+                          <option value="pending">Pending</option>
+                          <option value="overdue">Overdue</option>
+                        </select>
+                        {s.fee.utr && s.fee.status === "pending" && (
+                          <button className="btn btn-sm btn-primary" onClick={() => { setSelectedStudent(s.id); setModal("verifyUtr"); }}>Verify UTR</button>
+                        )}
+                      </div>
                     </td>
                   </tr>
                 ))}
@@ -1592,10 +1612,10 @@ function RankingsPage({ students }) {
               <div className="rank-pos" style={{ background: i < 3 ? `${posColors[i]}22` : "var(--bg-input)", color: i < 3 ? posColors[i] : "var(--text-secondary)" }}>
                 {i < 3 ? <Icon name="star" size={18} /> : `#${s.rank}`}
               </div>
-              <div className="user-avatar" style={{ width: 36, height: 36, fontSize: 12, background: `linear-gradient(135deg, ${beltColors[s.belt]?.border || "#888"}, ${beltColors[s.belt]?.bg || "#ccc"})`, color: beltColors[s.belt]?.text || "#333" }}>{s.avatar}</div>
+              <div className="user-avatar" style={{ width: 36, height: 36, fontSize: 12, background: eventMeta[s.event]?.color || "var(--border)", color: "white" }}>{s.avatar}</div>
               <div className="rank-info">
                 <h4>{s.name}</h4>
-                <span>{s.belt} Belt</span>
+                <span>{eventMeta[s.event]?.label || "Fighter"}</span>
               </div>
               <div className="rank-stats">
                 <span>W: <strong style={{ color: "var(--accent-green)" }}>{s.wins}</strong></span>
@@ -1658,7 +1678,7 @@ function ProfilePage({ student, setModal }) {
       </div>
       <div className="page-body">
         <div className="profile-header">
-          <div className="profile-avatar" style={{ background: `linear-gradient(135deg, ${beltColors[student.belt]?.border || "#888"}, ${beltColors[student.belt]?.text || "#333"})` }}>{student.avatar}</div>
+          <div className="profile-avatar" style={{ background: eventMeta[student.event]?.color || "var(--accent)" }}>{student.avatar}</div>
           <div className="profile-details">
             <h3>{student.name}</h3>
             <p>Member since {student.joinDate}</p>
@@ -1674,7 +1694,7 @@ function ProfilePage({ student, setModal }) {
           <div className="info-card"><label>Phone</label><p>{student.phone}</p></div>
           <div className="info-card"><label>Age</label><p>{student.age} years</p></div>
           <div className="info-card"><label>Weight</label><p>{student.weight}</p></div>
-          <div className="info-card"><label>Belt</label><span className="belt-badge" style={{ background: beltColors[student.belt]?.bg, color: beltColors[student.belt]?.text, borderColor: beltColors[student.belt]?.border }}>{student.belt} Belt</span></div>
+          <div className="info-card"><label>Primary Event</label><span className="event-badge" style={{ color: eventMeta[student.event]?.color }}>{eventMeta[student.event]?.label}</span></div>
           <div className="info-card"><label>Fee Status</label><span className="badge" style={{ background: feeBadge[student.fee.status]?.bg, color: feeBadge[student.fee.status]?.text }}>{feeBadge[student.fee.status]?.label}</span></div>
         </div>
       </div>
@@ -1685,14 +1705,14 @@ function ProfilePage({ student, setModal }) {
 // ---------- Modals ----------
 
 function RegisterModal({ students, setStudents, close, showToast }) {
-  const [form, setForm] = useState({ name: "", email: "", phone: "", age: "", weight: "", belt: "White" });
+  const [form, setForm] = useState({ name: "", email: "", phone: "", age: "", weight: "", event: "PF" });
   const update = (k, v) => setForm(p => ({ ...p, [k]: v }));
 
   const submit = () => {
     if (!form.name || !form.email || !form.phone) return;
     const newStudent = {
       id: generateId(), name: form.name, email: form.email, phone: form.phone,
-      belt: form.belt, age: parseInt(form.age) || 18, weight: form.weight || "—",
+      event: form.event, age: parseInt(form.age) || 18, weight: form.weight || "—",
       joinDate: new Date().toISOString().split("T")[0], status: "pending",
       avatar: form.name.split(" ").map(n => n[0]).join("").toUpperCase().slice(0, 2),
       fee: { amount: 2500, status: "pending", dueDate: "", history: [] },
@@ -1718,9 +1738,9 @@ function RegisterModal({ students, setStudents, close, showToast }) {
             <div className="form-group"><label>Weight</label><input className="form-input" value={form.weight} onChange={e => update("weight", e.target.value)} placeholder="65kg" /></div>
           </div>
           <div className="form-group">
-            <label>Current Belt Level</label>
-            <select className="form-select" value={form.belt} onChange={e => update("belt", e.target.value)}>
-              {Object.keys(beltColors).map(b => <option key={b} value={b}>{b}</option>)}
+            <label>Primary Event Type</label>
+            <select className="form-select" value={form.event} onChange={e => update("event", e.target.value)}>
+              {eventTypes.map(e => <option key={e} value={e}>{eventMeta[e].label} ({e})</option>)}
             </select>
           </div>
         </div>
@@ -1762,7 +1782,7 @@ function EditProfileModal({ student, students, setStudents, close, showToast }) 
 }
 
 function NewCompModal({ competitions, setCompetitions, close, showToast }) {
-  const [form, setForm] = useState({ name: "", date: "", venue: "", category: "All Belts", max: 32, desc: "" });
+  const [form, setForm] = useState({ name: "", date: "", venue: "", category: "PF", max: 32, desc: "" });
   const update = (k, v) => setForm(p => ({ ...p, [k]: v }));
 
   return (
@@ -1777,9 +1797,10 @@ function NewCompModal({ competitions, setCompetitions, close, showToast }) {
           </div>
           <div className="form-row">
             <div className="form-group">
-              <label>Category</label>
+              <label>Event Category</label>
               <select className="form-select" value={form.category} onChange={e => update("category", e.target.value)}>
-                <option>All Belts</option><option>White Belt</option><option>Yellow Belt+</option><option>Green Belt+</option><option>Blue Belt+</option>
+                {eventTypes.map(e => <option key={e} value={e}>{eventMeta[e].label}</option>)}
+                <option value="All Events">All Events</option>
               </select>
             </div>
             <div className="form-group"><label>Max Participants</label><input className="form-input" type="number" value={form.max} onChange={e => update("max", e.target.value)} /></div>
@@ -1835,3 +1856,75 @@ function SendNotifModal({ notifications, setNotifications, students, close, show
     </div>
   );
 }
+
+function SubmitUtrModal({ currentStudent, setStudents, close, showToast }) {
+  const [utr, setUtr] = useState("");
+
+  const submit = () => {
+    if (!utr.trim()) return;
+    setStudents(prev => prev.map(s => s.id === currentStudent.id ? { ...s, fee: { ...s.fee, utr: utr.trim(), status: "pending" } } : s));
+    showToast("Payment details submitted for verification.");
+    close();
+  };
+
+  return (
+    <div className="modal-overlay" onClick={close}>
+      <div className="modal" onClick={e => e.stopPropagation()}>
+        <div className="modal-header"><h3>Submit Payment Details</h3><button className="btn-icon" onClick={close}><Icon name="x" size={16} /></button></div>
+        <div className="modal-body">
+          <div className="form-group">
+            <label>Transaction ID / UTR Number *</label>
+            <input className="form-input" value={utr} onChange={e => setUtr(e.target.value)} placeholder="Enter 12-digit UTR or Txn ID" />
+            <p style={{ fontSize: 11, color: "var(--text-muted)", marginTop: 8 }}>Please double check the ID from your UPI/Bank app before submitting.</p>
+          </div>
+        </div>
+        <div className="modal-footer">
+          <button className="btn btn-secondary" onClick={close}>Cancel</button>
+          <button className="btn btn-primary" onClick={submit}>Submit for Verification</button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function VerifyUtrModal({ selectedStudent, students, setStudents, close, showToast }) {
+  const s = students.find(st => st.id === selectedStudent);
+  if (!s) return null;
+
+  const approve = () => {
+    setStudents(prev => prev.map(st => st.id === s.id ? { ...st, fee: { ...st.fee, status: "completed", utr: null } } : st));
+    showToast(`Payment approved for ${s.name}`);
+    close();
+  };
+
+  const reject = () => {
+    setStudents(prev => prev.map(st => st.id === s.id ? { ...st, fee: { ...st.fee, utr: null } } : st));
+    showToast(`Payment verification rejected for ${s.name}`);
+    close();
+  };
+
+  return (
+    <div className="modal-overlay" onClick={close}>
+      <div className="modal" onClick={e => e.stopPropagation()}>
+        <div className="modal-header"><h3>Verify Payment (UTR)</h3><button className="btn-icon" onClick={close}><Icon name="x" size={16} /></button></div>
+        <div className="modal-body">
+          <div style={{ marginBottom: 16 }}>
+            <label style={{ fontSize: 11, color: "var(--text-muted)", textTransform: "uppercase" }}>Student</label>
+            <p style={{ fontWeight: 600 }}>{s.name}</p>
+          </div>
+          <div style={{ padding: 16, background: "var(--bg-input)", borderRadius: 8, border: "1px solid var(--border)" }}>
+            <label style={{ fontSize: 11, color: "var(--text-muted)", textTransform: "uppercase" }}>Submitted UTR / Transaction ID</label>
+            <p style={{ fontSize: 18, fontFamily: "monospace", letterSpacing: 1, color: "var(--accent-blue)", marginTop: 4 }}>{s.fee.utr}</p>
+          </div>
+          <p style={{ fontSize: 12, color: "var(--text-secondary)", marginTop: 16 }}>Check your bank statement for this UTR to confirm receipt of ₹{s.fee.amount}.</p>
+        </div>
+        <div className="modal-footer">
+          <button className="btn btn-secondary" style={{ background: "#721C24", color: "#F8D7DA", border: "none" }} onClick={reject}>Reject / Clear</button>
+          <button className="btn btn-primary" onClick={approve}>Approve & Mark Paid</button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+
